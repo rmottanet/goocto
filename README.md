@@ -49,7 +49,7 @@ After successful installation, you can use **GoOcto** to perform the following o
 
 - **Delete a repository:**
   ```bash
-  goocto del <repository-name>
+  goocto del <owner> <repository-name>
   ```
 
 For more details on each command, you can use the `--help` option. For example:
