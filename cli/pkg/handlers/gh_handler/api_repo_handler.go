@@ -41,7 +41,7 @@ func (hrepo *RepoGHHandler) CreateNewRepo(params models.RepoCreationParams) erro
     subroute := "/user/repos"
     _, err = hrepo.githubAdapter.Post(subroute, requestDataJSON)
     if err != nil {
-        return fmt.Errorf("error creating repository on GitHub: %v", err)
+        return err
     }
 
     return nil
@@ -74,7 +74,7 @@ func (hrepo *RepoGHHandler) EditInfoRepo(repoOwner string, repoName string, para
     subroute := fmt.Sprintf("/repos/%s/%s", repoOwner, repoName)
     _, err = hrepo.githubAdapter.Patch(subroute, updateData)
     if err != nil {
-        return fmt.Errorf("error when editing repository on GitHub: %v", err)
+        return err
     }
 
     return nil
@@ -93,7 +93,7 @@ func (hrepo *RepoGHHandler) EditRepoTopics(repoOwner string, repoName string, ne
 
     _, err = hrepo.githubAdapter.Put(subroute, requestData)
     if err != nil {
-        return fmt.Errorf("error when updating repository topics on GitHub: %v", err)
+        return err
     }
 
     return nil
@@ -106,7 +106,7 @@ func (hrepo *RepoGHHandler) DeleteRepo(repoOwner, repoName string) error {
 
 	err := hrepo.githubAdapter.Delete(subroute)
 	if err != nil {
-		return fmt.Errorf("error when deleting repository on GitHub: %v", err)
+		return err
 	}
 
 	return nil

@@ -15,7 +15,7 @@ import (
 func NewCreateRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
 	var createRepoCmd = &cobra.Command{
 		Use:   "new [repository name] [description]",
-		Short: "Creates a new repository for the logged in user",
+		Short: "Creates a new repository for the logged in user.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			
 			var repoName, description string
@@ -35,10 +35,10 @@ func NewCreateRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
 
 			err := repoHandler.CreateNewRepo(params)
 			if err != nil {
-				return err
+				fmt.Println(err)
+			} else {
+				fmt.Println("New repository created successfully.")
 			}
-
-			fmt.Println("New repository created successfully")
 			return nil
 		},
 	}
@@ -50,7 +50,7 @@ func NewCreateRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
 func NewEditInfoRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
     var editInfoRepoCmd = &cobra.Command{
         Use:   "edit [owner] [repository]",
-        Short: "Edit information from a repository on GitHub",
+        Short: "Edit information from a repository on GitHub.",
         Args:  cobra.MinimumNArgs(2),
         RunE: func(cmd *cobra.Command, args []string) error {
 
@@ -63,9 +63,10 @@ func NewEditInfoRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
                 
                 err := repoHandler.EditRepoTopics(repoOwner, repoName, topics)
                 if err != nil {
-                    return err
-                }
-                fmt.Println("Topics updated successfully")
+                    fmt.Println(err)
+                } else {
+					fmt.Println("Topics updated successfully.")
+				}
                 return nil
             }
 
@@ -74,7 +75,7 @@ func NewEditInfoRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
             homepage, _ := cmd.Flags().GetString("homepage")
 
             if description == "" && name == "" && homepage == "" {
-                return errors.New("at least one edit parameter must be provided")
+                return errors.New("At least one edit parameter must be provided.")
             }
 
             params := models.RepoEditionParams{
@@ -83,12 +84,12 @@ func NewEditInfoRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
                 Homepage:    homepage,
             }
 
-            err := repoHandler.EditInfoRepo(repoOwner, repoName, params)
+			err := repoHandler.EditInfoRepo(repoOwner, repoName, params)
             if err != nil {
-                return err
+                fmt.Println(err)
+            } else {
+                fmt.Println("Repository updated successfully.")
             }
-
-            fmt.Println("Repository updated successfully")
             return nil
         },
     }
@@ -119,21 +120,22 @@ func NewEditInfoRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
 func NewDeleteRepoCmd(repoHandler *gh_handler.RepoGHHandler) *cobra.Command {
 	var deleteRepoCmd = &cobra.Command{
         Use:   "del [owner] [repository]",
-        Short: "Deletes a repository on GitHub",
+        Short: "Deletes a repository on GitHub.",
         Args:  cobra.MinimumNArgs(2),
         RunE: func(cmd *cobra.Command, args []string) error {
 
             repoOwner := args[0]
             repoName := args[1]
-
+			
 			err := repoHandler.DeleteRepo(repoOwner, repoName)
-			if err != nil {
-				return err
-			}
-
-			fmt.Println("Repository deleted successfully")
-			return nil
+            if err != nil {
+                fmt.Println(err)
+            } else {
+                fmt.Println("Repository deleted successfully.")
+            }
+            return nil
 		},
 	}
+	deleteRepoCmd.SilenceUsage = true
 	return deleteRepoCmd
 }
