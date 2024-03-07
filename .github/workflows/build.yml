@@ -1,0 +1,72 @@
+name: Build and Release
+
+on:
+  pull_request:
+    branches: [ "main" ] 
+    types: [closed]
+     
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up Go environment
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+      
+      - name: Install Git
+        run: apt update && apt install -y git  
+       
+      - name: Download Go module dependencies
+        run: go mod download
+        
+      - name: Build Go application
+        run: go build -o goocto ./cli/cmd/main.go
+        
+      - name: Archive binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: goocto
+          path: ./goocto
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: goocto
+          path: .
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHACTION_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: ${{ github.event.pull_request.title }}
+          body: ${{ github.event.pull_request.body }}
+          draft: false
+          prerelease: false
+      
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHACTION_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./goocto
+          asset_name: goocto
+          asset_content_type: application/octet-stream
