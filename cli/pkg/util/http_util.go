@@ -1,4 +1,3 @@
-// pkg/util/http_util.go
 package util
 
 import "net/http"
