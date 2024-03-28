@@ -1,4 +1,3 @@
-// pkg/util/paginate.go
 package util
 
 import (

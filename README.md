@@ -24,13 +24,13 @@ git clone https://github.com/rmottanet/goocto.git
 2. Navigate to the **GoOcto** directory:
 
 ```bash
-cd goocto/cli/cmd
+cd goocto/
 ```
 
 3. Compile the source code of **GoOcto**:
 
 ```bash
-go build -o ../../goocto
+make
 ```
 
 4. After successful compilation, you will have the executable binary of **GoOcto** ready for use.
@@ -46,10 +46,15 @@ After successful installation, you can use **GoOcto** to perform the following o
   ```bash
   goocto new <repository-name>
   ```
-
+  
+- **Edit a repository:**
+  ```bash
+  goocto edit <repository-name>
+  ```
+  
 - **Delete a repository:**
   ```bash
-  goocto del <owner> <repository-name>
+  goocto del <repository-name>
   ```
 
 For more details on each command, you can use the `--help` option. For example:

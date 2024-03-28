@@ -1,4 +1,3 @@
-// pkg/util/fetcher.go
 package util
 
 import (
